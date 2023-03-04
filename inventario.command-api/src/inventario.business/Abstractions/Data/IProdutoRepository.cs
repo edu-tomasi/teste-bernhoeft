@@ -1,4 +1,5 @@
 ﻿using inventario.business.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +11,6 @@ namespace inventario.business.Abstractions.Data
 
         Task AlterarAsync(ProdutoModel produto);
 
-        Task<IReadOnlyList<ProdutoModel>> ListarAsync(string categoria, string descricao, bool ativo);
+        Task<IEnumerable<ProdutoModel>> ListarAsync(Guid? id = null, string nome = null, string categoria = null, string descricao = null , bool? ativo = null);
     }
 }

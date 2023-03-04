@@ -1,4 +1,6 @@
 ﻿using inventario.business.Models;
+using System;
+using System.Collections.Generic;
 
 namespace inventario.data.Data.Statements
 {
@@ -42,10 +44,14 @@ namespace inventario.data.Data.Statements
             categoria.Ativo
         };
 
-        public static string ObterFiltrosParaConsulta(object filtros)
+        public static Dictionary<string, object> ObterParametrosParaListar(Guid? id, string nome, bool? ativo)
         {
-
-            return "";
+            return new Dictionary<string, object>()
+            {
+                ["Id"] = id,
+                ["Nome"] = nome is null ? null : $"%{nome}%",
+                ["Ativo"] = ativo
+            };
         }
     }
 }

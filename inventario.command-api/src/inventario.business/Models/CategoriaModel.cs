@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace inventario.business.Models
 {
@@ -9,5 +10,7 @@ namespace inventario.business.Models
         public string Nome { get; init; }
 
         public bool Ativo { get; init; }
+
+        public ICollection<ProdutoModel> Produtos { get; set; }
     }
 }

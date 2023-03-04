@@ -33,10 +33,17 @@ namespace inventario.data.Data
                               transaction: _unitOfWork.Transaction);
         }
 
-        public Task<IReadOnlyList<ProdutoModel>> ListarAsync(string categoria, string descricao, bool ativo)
+        public async Task<IEnumerable<ProdutoModel>> ListarAsync(Guid? id = null, string nome = null, string categoria = null, string descricao = null, bool? ativo = null)
         {
-            throw new NotImplementedException();
-
+            return await _unitOfWork.Connection
+                    .QueryAsync<ProdutoModel,CategoriaModel, ProdutoModel>(sql: ProdutoStatements.ListarProdutos,
+                                              map: (produto, categoria) => { 
+                                                  produto.Categoria = categoria; 
+                                                  return produto; 
+                                              },
+                                              param: ProdutoStatements.ObterParametrosParaListar(id, nome, descricao, categoria, ativo), 
+                                              transaction: _unitOfWork.Transaction,
+                                              splitOn: $"{nameof(ProdutoModel.IdCategoria)}");
         }
     }
 }

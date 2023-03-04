@@ -16,6 +16,7 @@ namespace inventario.business.Models.Response
 
         public string Descricao { get; set; }
 
-        public Guid IdCategoria { get; set; }
+        public CategoriaResponse Categoria {get; set;}
+
     }
 }

@@ -33,18 +33,13 @@ namespace inventario.data.Data
                               transaction: _unitOfWork.Transaction);
         }
 
-        public async Task<IEnumerable<CategoriaModel>> ListarAsync(Guid? id, string? nome, bool? ativo)
+        public async Task<IEnumerable<CategoriaModel>> ListarAsync(Guid? id, string nome, bool? ativo)
         {
-            var parameters = new Dictionary<string, object>()
-            {
-                ["Id"] = id,
-                ["Nome"] = nome is null ? null : $"%{nome}%",
-                ["Ativo"] = ativo
-            };
+            
 
             return await _unitOfWork.Connection
                             .QueryAsync<CategoriaModel>(sql: CategoriaStatements.ListarCategorias,
-                                                       param: parameters,
+                                                       param: CategoriaStatements.ObterParametrosParaListar(id, nome, ativo),
                                                        transaction: _unitOfWork.Transaction);
         }
 

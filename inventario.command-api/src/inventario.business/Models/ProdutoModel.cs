@@ -16,5 +16,7 @@ namespace inventario.business.Models
 
         public Guid IdCategoria { get; init; }
 
+        public CategoriaModel Categoria { get; set; }
+
     }
 }

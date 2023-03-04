@@ -8,39 +8,40 @@ namespace inventario.web_api.Controllers
     [Route("/api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    public class CategoriaController : ControllerBase
+    public class ProdutoController : ControllerBase
     {
-        public CategoriaController(ICategoriaService service)
+        public ProdutoController(IProdutoService service)
         {
             _service = service;
         }
 
-        private ICategoriaService _service { get; }
+        private IProdutoService _service { get; }
 
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<CategoriaResponse>>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] bool? Ativo)
+        public ActionResult<IEnumerable<ProdutoResponse>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] string? Descricao, [FromQuery] string? Categoria, [FromQuery] bool? Ativo)
         {
-            var result = await _service.ListarAsync(Id, Nome, Ativo);
-            return Ok(result);
+            throw new NotImplementedException();
+            return Ok();
         }
 
         [HttpGet("{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> GetById(Guid Id)
+        public async Task<ActionResult<ProdutoResponse>> GetById(Guid Id)
         {
             var result = await _service.ListarAsync(Id);
+            
             return Ok(result);
         }
 
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> Post(CategoriaRequest request)
+        public async Task<ActionResult<ProdutoResponse>> Post(ProdutoRequest request)
         {
             var result = await _service.AdicionarAsync(request);
 
@@ -51,11 +52,10 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> Put(Guid Id, CategoriaRequest request)
+        public ActionResult<CategoriaResponse> Put(Guid Id, CategoriaRequest request)
         {
-            var result = await _service.AlterarAsync(Id, request);
-
-            return Ok(result);
+            throw new NotImplementedException();
+            return Ok();
         }
 
         [HttpDelete("{Id}")]
@@ -64,7 +64,7 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid Id)
         {
-            await _service.RemoverAsync(Id);
+            throw new NotImplementedException();
             return NoContent();
         }
     }

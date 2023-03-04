@@ -56,7 +56,7 @@ namespace inventario.business.Service
             _uow.Commit();
         }
 
-        public async Task<IEnumerable<CategoriaResponse>> ListarAsync(Guid? id = null, string? nome = null, bool? ativo = null)
+        public async Task<IEnumerable<CategoriaResponse>> ListarAsync(Guid? id = null, string nome = null, bool? ativo = null)
         {
             var result = await _categoriaRepository.ListarAsync(id, nome, ativo);
 
