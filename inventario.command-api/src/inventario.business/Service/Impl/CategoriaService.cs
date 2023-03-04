@@ -2,7 +2,8 @@
 using inventario.business.Models;
 using inventario.business.Models.Request;
 using inventario.business.Models.Response;
-using System.Threading;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace inventario.business.Service
@@ -16,22 +17,27 @@ namespace inventario.business.Service
             _categoriaRepository = categoriaRepository;
         }
 
-        public async Task<CategoriaResponse> AdicionarAsync(CategoriaRequest request, CancellationToken cancellationToken = default)
+        public async Task<CategoriaResponse> AdicionarAsync(CategoriaRequest request)
         {
             CategoriaModel categoriaModel = CreateFrom(request);
 
-            await _categoriaRepository.AdicionarAsync(categoriaModel, cancellationToken);
+            await _categoriaRepository.AdicionarAsync(categoriaModel);
 
             return CreateFrom(categoriaModel);
         }
 
-        public async Task<CategoriaResponse> AlterarAsync(CategoriaRequest request, CancellationToken cancellationToken = default)
+        public async Task<CategoriaResponse> AlterarAsync(CategoriaRequest request)
         {
             CategoriaModel categoriaModel = CreateFrom(request);
 
-            await _categoriaRepository.AlterarAsync(categoriaModel, cancellationToken);
+            await _categoriaRepository.AlterarAsync(categoriaModel);
 
             return CreateFrom(categoriaModel);
+        }
+
+        public Task<IEnumerable<CategoriaResponse>> ListarAsync(string nome, bool ativo)
+        {
+            throw new NotImplementedException();
         }
 
         private static CategoriaModel CreateFrom(CategoriaRequest request) => new()

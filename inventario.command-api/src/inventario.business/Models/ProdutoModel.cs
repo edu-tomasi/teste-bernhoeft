@@ -12,6 +12,8 @@ namespace inventario.business.Models
 
         public decimal Preco { get; init; }
 
+        public bool Ativo { get; init; }
+
         public Guid IdCategoria { get; init; }
 
     }

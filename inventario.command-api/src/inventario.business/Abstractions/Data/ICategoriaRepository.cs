@@ -7,10 +7,10 @@ namespace inventario.business.Abstractions.Data
 {
     public interface ICategoriaRepository
     {
-        Task AdicionarAsync(CategoriaModel categoria, CancellationToken cancellationToken = default);
+        Task AdicionarAsync(CategoriaModel categoria);
 
-        Task AlterarAsync(CategoriaModel categoria, CancellationToken cancellationToken = default);
+        Task AlterarAsync(CategoriaModel categoria);
 
-        Task<IReadOnlyList<CategoriaModel>> ListarAsync(string nome, bool ativo, CancellationToken cancelationToken = default);
+        Task<IEnumerable<CategoriaModel>> ListarAsync(string nome, int ativo);
     }
 }

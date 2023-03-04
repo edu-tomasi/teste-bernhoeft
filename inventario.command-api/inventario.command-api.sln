@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "inventario.data", "src\inventario.data\inventario.data.csproj", "{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{C446E336-4C52-4CC9-83A3-1E80B00E3CAC} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}
 		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5} = {4A527B23-2A3E-487B-8311-875C2A640A1E}
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}
+		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AEB1C26E-E1FF-4DEF-9BF1-92952C4F9961}
