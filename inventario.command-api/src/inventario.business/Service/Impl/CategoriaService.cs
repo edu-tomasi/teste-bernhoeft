@@ -26,7 +26,7 @@ namespace inventario.business.Service
             return CreateFrom(categoriaModel);
         }
 
-        public async Task<CategoriaResponse> AlterarAsync(CategoriaRequest request)
+        public async Task<CategoriaResponse> AlterarAsync(Guid Id, CategoriaRequest request)
         {
             CategoriaModel categoriaModel = CreateFrom(request);
 
@@ -43,7 +43,7 @@ namespace inventario.business.Service
         private static CategoriaModel CreateFrom(CategoriaRequest request) => new()
         {
             Ativo = request.Ativo,
-            Id = request.Id,
+            Id = request.Id ?? Guid.NewGuid(),
             Nome = request.Nome,
         };
 
