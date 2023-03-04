@@ -39,10 +39,11 @@ namespace inventario.web_api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage()
-                    .UseSwagger()
-                    .UseSwaggerUI();
+                app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger()
+               .UseSwaggerUI();
 
             app.UseHttpsRedirection()
                 .UseRouting()

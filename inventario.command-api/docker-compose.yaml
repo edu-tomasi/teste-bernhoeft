@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  sqldata:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      restart: always
+      ports:
+        - "14333:1433"
+      environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=yourStrong(!)Password
+
+  inventario-webapi:
+      image: inventario.web-api:${PLATFORM:-linux}-${TAG:-latest}
+      build:
+        context: .
+        dockerfile: Dockerfile
+      depends_on:
+        - sqldata
+      ports:
+        - "8080:80"
+        - "8443:443"

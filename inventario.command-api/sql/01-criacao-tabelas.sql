@@ -1,18 +1,25 @@
-CREATE DATABASE [bernhoeft]
-GO
+USE master
+
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'bernhoeft')
+BEGIN
+    CREATE DATABASE bernhoeft
+END;
 
 USE bernhoeft
-GO
 
-CREATE TABLE Categoria (
-    Id UNIQUEIDENTIFIER NOT NULL, 
-    Nome VARCHAR(200) NOT NULL, 
-    Ativo BIT DEFAULT 1, 
-    CONSTRAINT PK_Categoria PRIMARY KEY (Id)
-)
-GO
+IF OBJECT_ID('Categoria', 'U') IS NULL
+BEGIN
+    CREATE TABLE Categoria (
+        Id UNIQUEIDENTIFIER NOT NULL, 
+        Nome VARCHAR(200) NOT NULL, 
+        Ativo BIT DEFAULT 1, 
+        CONSTRAINT PK_Categoria PRIMARY KEY (Id)
+    );
+END;
 
-CREATE TABLE Produto (
+IF OBJECT_ID('Produto', 'U') IS NULL
+BEGIN
+  CREATE TABLE Produto (
     Id UNIQUEIDENTIFIER NOT NULL, 
     Nome VARCHAR(200) NOT NULL, 
     Descricao VARCHAR(400) DEFAULT '', 
@@ -21,8 +28,8 @@ CREATE TABLE Produto (
     Ativo BIT DEFAULT 1, 
     CONSTRAINT PK_Produto PRIMARY KEY (Id),
     CONSTRAINT FK_CategoriaProduto FOREIGN KEY (IdCategoria) REFERENCES Categoria(Id)
-)
-GO
+    );
+END;
 
 
 -- INSERT INTO Categoria VALUES (NEWID(), 'Copos', 1)

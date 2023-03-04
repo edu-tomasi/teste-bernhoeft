@@ -6,8 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>inventario.web_api</RootNamespace>
     <UserSecretsId>45c3f39a-d301-42f3-922a-d15e8a0b9e65</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
