@@ -21,19 +21,20 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> Get([FromQuery] string nome, [FromQuery] bool ativo)
+        public async Task<ActionResult<CategoriaResponse>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] bool? Ativo)
         {
-            return Ok(default);
+            var result = await _service.ListarAsync(Id, Nome, Ativo);
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> Get(Guid Id)
+        public async Task<ActionResult<CategoriaResponse>> GetById(Guid Id)
         {
-
-            return Ok(default);
+            var result = await _service.ListarAsync(Id);
+            return Ok(result);
         }
 
         [HttpPost()]
@@ -43,7 +44,7 @@ namespace inventario.web_api.Controllers
         {
             var result = await _service.AdicionarAsync(request);
 
-            return Created("foo/bar", result);
+            return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
         [HttpPut("{Id}")]
@@ -63,7 +64,8 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid Id)
         {
-            return Ok(default);
+            await _service.RemoverAsync(Id);
+            return NoContent();
         }
     }
 }

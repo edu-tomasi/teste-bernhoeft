@@ -91,7 +91,6 @@ namespace inventario.data.Context
         private void ClearTransaction()
         {
             Connection.Close();
-            //Connection.Dispose();
             Transaction.Dispose();
             Transaction = null;
         }

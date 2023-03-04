@@ -33,13 +33,27 @@ namespace inventario.data.Data
                               transaction: _unitOfWork.Transaction);
         }
 
-        public async Task<IEnumerable<CategoriaModel>> ListarAsync(string nome, int ativo)
+        public async Task<IEnumerable<CategoriaModel>> ListarAsync(Guid? id, string? nome, bool? ativo)
         {
-            throw new NotImplementedException("Filtro por nome não está funcionando.");
+            var parameters = new Dictionary<string, object>()
+            {
+                ["Id"] = id,
+                ["Nome"] = nome is null ? null : $"%{nome}%",
+                ["Ativo"] = ativo
+            };
+
             return await _unitOfWork.Connection
                             .QueryAsync<CategoriaModel>(sql: CategoriaStatements.ListarCategorias,
-                                                       param: new { Nome = nome, Ativo = ativo },
+                                                       param: parameters,
                                                        transaction: _unitOfWork.Transaction);
+        }
+
+        public async Task RemoverAsync(Guid Id)
+        {
+            await _unitOfWork.Connection
+                    .ExecuteAsync(sql: CategoriaStatements.RemoverCategoria,
+                                  param: new { Id },
+                                  transaction: _unitOfWork.Transaction);
         }
 
     }

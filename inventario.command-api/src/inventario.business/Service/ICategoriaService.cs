@@ -12,6 +12,8 @@ namespace inventario.business.Service
 
         Task<CategoriaResponse> AlterarAsync(Guid Id, CategoriaRequest request);
 
-        Task<IEnumerable<CategoriaResponse>> ListarAsync(string nome, bool ativo);
+        Task<IEnumerable<CategoriaResponse>> ListarAsync(Guid? Id = null, string? nome = null, bool? ativo = null);
+
+        Task RemoverAsync(Guid Id);
     }
 }
