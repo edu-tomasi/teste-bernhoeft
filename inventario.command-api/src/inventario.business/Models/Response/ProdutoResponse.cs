@@ -10,8 +10,12 @@ namespace inventario.business.Models.Response
 
         public string Nome { get; init; }
 
-        public string Ativo { get; init; }
+        public bool Ativo { get; init; }
 
-        public CategoriaResponse Categoria { get; init; }
+        public decimal Preco { get; set; }
+
+        public string Descricao { get; set; }
+
+        public Guid IdCategoria { get; set; }
     }
 }

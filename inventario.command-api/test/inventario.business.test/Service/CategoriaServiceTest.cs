@@ -5,11 +5,11 @@ using inventario.business.Models.Response;
 using inventario.business.Service;
 using Moq;
 using NUnit.Framework;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace inventario.business.test.Service
 {
+
     public class CategoriaServiceTest
     {
         private readonly MockRepository _mocks = new(MockBehavior.Strict);
@@ -29,7 +29,7 @@ namespace inventario.business.test.Service
             CategoriaRequest request = new() { Ativo = true, Nome = "Copo" };
 
             _categoriaRepository
-                .Setup(x => x.AdicionarAsync(It.Is<CategoriaModel>(t => t.Id.Equals(request.Id)), CancellationToken.None))
+                .Setup(x => x.AdicionarAsync(It.Is<CategoriaModel>(t => t.Id.Equals(request.Id))))
                 .Returns(Task.CompletedTask);
 
             CategoriaService service = GetService();
@@ -49,7 +49,7 @@ namespace inventario.business.test.Service
 
             CategoriaRequest request = new() { Ativo = false, Nome = "Xícara" };
 
-            _categoriaRepository.Setup(x => x.AlterarAsync(It.Is<CategoriaModel>(t => t.Id.Equals(request.Id)), CancellationToken.None))
+            _categoriaRepository.Setup(x => x.AlterarAsync(It.Is<CategoriaModel>(t => t.Id.Equals(request.Id))))
                 .Returns(Task.CompletedTask);
 
             CategoriaService service = GetService();
@@ -62,8 +62,7 @@ namespace inventario.business.test.Service
             _mocks.Verify();
         }
 
-        private CategoriaService GetService() => new(
-            _categoriaRepository.Object
-        );
+        private CategoriaService GetService()
+            => new(_categoriaRepository.Object);
     }
 }

@@ -18,7 +18,8 @@ namespace inventario.data.Context
         public IDbConnection Connection
         {
             get
-            { if (_connection.State is not ConnectionState.Open)
+            {
+                if (_connection.State is not ConnectionState.Open)
                 {
                     _connection.Open();
                 }
@@ -39,7 +40,7 @@ namespace inventario.data.Context
             {
                 Transaction = _connection.BeginTransaction();
             }
-            
+
             _transactionCounter++;
         }
 
@@ -90,14 +91,14 @@ namespace inventario.data.Context
         private void ClearTransaction()
         {
             Connection.Close();
-            Connection.Dispose();
+            //Connection.Dispose();
             Transaction.Dispose();
             Transaction = null;
         }
 
         public void Dispose()
         {
-            Dispose(disposing: true);
+            Dispose(disposing: false);
             GC.SuppressFinalize(this);
         }
 

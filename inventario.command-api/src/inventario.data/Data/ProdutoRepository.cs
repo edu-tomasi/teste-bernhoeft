@@ -14,7 +14,7 @@ namespace inventario.data.Data
 
         public ProdutoRepository(IUnitOfWork unitOfWork)
         {
-            _unitOfWork= unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task AdicionarAsync(ProdutoModel produto)
@@ -28,8 +28,8 @@ namespace inventario.data.Data
         public async Task AlterarAsync(ProdutoModel produto)
         {
             await _unitOfWork.Connection
-                .ExecuteAsync(sql: ProdutoStatements.AlterarProduto, 
-                              param: ProdutoStatements.ObterParametros(produto), 
+                .ExecuteAsync(sql: ProdutoStatements.AlterarProduto,
+                              param: ProdutoStatements.ObterParametros(produto),
                               transaction: _unitOfWork.Transaction);
         }
 

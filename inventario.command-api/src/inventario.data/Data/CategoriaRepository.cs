@@ -1,10 +1,10 @@
 ﻿using Dapper;
 using inventario.business.Abstractions.Data;
 using inventario.business.Models;
+using inventario.data.Data.Statements;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using inventario.data.Data.Statements;
 
 namespace inventario.data.Data
 {

@@ -14,6 +14,8 @@ namespace inventario.business.Models.Request
 
         public bool Ativo { get; init; }
 
-        public CategoriaRequest Categoria { get; init; }
+        public Guid IdCategoria { get; init; }
+
+        public string Descricao { get; init; }
     }
 }

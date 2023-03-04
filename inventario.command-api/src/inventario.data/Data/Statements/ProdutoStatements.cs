@@ -14,7 +14,14 @@ namespace inventario.data.Data.Statements
                 @{nameof(ProdutoModel.IdCategoria)},
                 @{nameof(ProdutoModel.Ativo)})";
 
-        public static readonly string AlterarProduto = "";
+        public static readonly string AlterarProduto = $@"
+            UPDATE bernhoeft.dbo.Produto
+                SET {nameof(ProdutoModel.Nome)} = @{nameof(ProdutoModel.Nome)},
+                    {nameof(ProdutoModel.Descricao)} = @{nameof(ProdutoModel.Descricao)},
+                    {nameof(ProdutoModel.Preco)} = @{nameof(ProdutoModel.Preco)},
+                    {nameof(ProdutoModel.IdCategoria)} = @{nameof(ProdutoModel.IdCategoria)},
+                    {nameof(ProdutoModel.Ativo)} = @{nameof(ProdutoModel.Ativo)}
+                WHERE {nameof(ProdutoModel.Id)} = @{nameof(ProdutoModel.Id)}";
 
         public static readonly string ListarProdutos = "";
 

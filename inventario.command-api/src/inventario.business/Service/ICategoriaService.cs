@@ -1,6 +1,5 @@
 ﻿using inventario.business.Models.Request;
 using inventario.business.Models.Response;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,5 +1,4 @@
 ﻿using inventario.business.Models;
-using System.Net.NetworkInformation;
 
 namespace inventario.data.Data.Statements
 {
