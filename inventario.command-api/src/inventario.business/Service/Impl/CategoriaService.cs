@@ -11,12 +11,14 @@ namespace inventario.business.Service
 {
     public class CategoriaService : ICategoriaService
     {
-        private ICategoriaRepository _categoriaRepository;
-        private IUnitOfWork _uow;
+        private readonly ICategoriaRepository _categoriaRepository;
+        private readonly IProdutoRepository _produtoRepository;
+        private readonly IUnitOfWork _uow;
 
-        public CategoriaService(ICategoriaRepository categoriaRepository, IUnitOfWork uow)
+        public CategoriaService(ICategoriaRepository categoriaRepository, IProdutoRepository produtoRepository, IUnitOfWork uow)
         {
             _categoriaRepository = categoriaRepository;
+            _produtoRepository = produtoRepository;
             _uow = uow;
         }
 
@@ -39,7 +41,7 @@ namespace inventario.business.Service
 
             if (!categorias.Any())
             {
-                throw new NotImplementedException();
+                throw new InvalidOperationException();
             }
 
             _uow.BeginTransaction();
@@ -52,6 +54,13 @@ namespace inventario.business.Service
         public async Task RemoverAsync(Guid Id)
         {
             _uow.BeginTransaction();
+            var produtos = await _produtoRepository.ListarAsync(idCategoria: Id);
+
+            foreach (var item in produtos)
+            {
+                await _produtoRepository.RemoverAsync(item.Id);
+            }
+
             await _categoriaRepository.RemoverAsync(Id);
             _uow.Commit();
         }

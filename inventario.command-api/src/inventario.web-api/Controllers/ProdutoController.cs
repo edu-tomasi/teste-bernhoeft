@@ -21,10 +21,10 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IEnumerable<ProdutoResponse>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] string? Descricao, [FromQuery] string? Categoria, [FromQuery] bool? Ativo)
+        public async Task<ActionResult<IEnumerable<ProdutoResponse>>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] Guid? IdCategoria, [FromQuery] string? Descricao, [FromQuery] string? Categoria, [FromQuery] bool? Ativo)
         {
-            throw new NotImplementedException();
-            return Ok();
+            var result = await _service.ListarAsync(Id, Nome, IdCategoria, Descricao, Categoria, Ativo);
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]
@@ -34,7 +34,6 @@ namespace inventario.web_api.Controllers
         public async Task<ActionResult<ProdutoResponse>> GetById(Guid Id)
         {
             var result = await _service.ListarAsync(Id);
-            
             return Ok(result);
         }
 
@@ -44,7 +43,6 @@ namespace inventario.web_api.Controllers
         public async Task<ActionResult<ProdutoResponse>> Post(ProdutoRequest request)
         {
             var result = await _service.AdicionarAsync(request);
-
             return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
@@ -52,10 +50,10 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<CategoriaResponse> Put(Guid Id, CategoriaRequest request)
+        public async Task<ActionResult<ProdutoResponse>> Put(Guid Id, ProdutoRequest request)
         {
-            throw new NotImplementedException();
-            return Ok();
+            var response = await _service.AlterarAsync(Id, request);
+            return Ok(response);
         }
 
         [HttpDelete("{Id}")]
@@ -64,7 +62,7 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid Id)
         {
-            throw new NotImplementedException();
+            await _service.RemoverAsync(Id);
             return NoContent();
         }
     }

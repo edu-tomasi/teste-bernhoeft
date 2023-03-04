@@ -35,8 +35,6 @@ namespace inventario.data.Data
 
         public async Task<IEnumerable<CategoriaModel>> ListarAsync(Guid? id, string nome, bool? ativo)
         {
-            
-
             return await _unitOfWork.Connection
                             .QueryAsync<CategoriaModel>(sql: CategoriaStatements.ListarCategorias,
                                                        param: CategoriaStatements.ObterParametrosParaListar(id, nome, ativo),

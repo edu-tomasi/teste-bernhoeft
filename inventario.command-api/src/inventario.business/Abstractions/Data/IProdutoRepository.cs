@@ -11,6 +11,8 @@ namespace inventario.business.Abstractions.Data
 
         Task AlterarAsync(ProdutoModel produto);
 
-        Task<IEnumerable<ProdutoModel>> ListarAsync(Guid? id = null, string nome = null, string categoria = null, string descricao = null , bool? ativo = null);
+        Task<IEnumerable<ProdutoModel>> ListarAsync(Guid? id = null, string nome = null,Guid? idCategoria = null, string categoria = null, string descricao = null , bool? ativo = null);
+
+        Task RemoverAsync(Guid Id);
     }
 }

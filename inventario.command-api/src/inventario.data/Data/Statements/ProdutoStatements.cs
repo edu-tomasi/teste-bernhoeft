@@ -37,11 +37,22 @@ namespace inventario.data.Data.Statements
                     c.{nameof(ProdutoModel.Categoria.Ativo)}
             FROM bernhoeft.dbo.Produto p WITH (NOLOCK)
             INNER JOIN bernhoeft.dbo.Categoria c WITH (NOLOCK) ON p.{nameof(ProdutoModel.IdCategoria)} = c.{nameof(CategoriaModel.Id)}
-            WHERE (p.Id = @{nameof(ProdutoModel.Id)} OR @{nameof(ProdutoModel.Id)} IS NULL)
-            AND (p.Ativo = @{nameof(ProdutoModel.Ativo)} OR @{nameof(ProdutoModel.Ativo)} IS NULL)
-            AND (p.Nome LIKE @{nameof(ProdutoModel.Nome)} OR @{nameof(ProdutoModel.Nome)} IS NULL)
-            AND (p.Descricao LIKE @{nameof(ProdutoModel.Descricao)} OR @{nameof(ProdutoModel.Descricao)} IS NULL)
-            AND (c.Nome = @CategoriaNome OR @CategoriaNome IS NULL)";
+            WHERE (p.{nameof(ProdutoModel.Id)} = @{nameof(ProdutoModel.Id)} 
+                    OR @{nameof(ProdutoModel.Id)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Ativo)} = @{nameof(ProdutoModel.Ativo)}
+                    OR @{nameof(ProdutoModel.Ativo)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Nome)} COLLATE Latin1_general_CI_AI LIKE @{nameof(ProdutoModel.Nome)} COLLATE Latin1_general_CI_AI 
+                    OR @{nameof(ProdutoModel.Nome)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Descricao)} COLLATE Latin1_general_CI_AI LIKE @{nameof(ProdutoModel.Descricao)} COLLATE Latin1_general_CI_AI 
+                    OR @{nameof(ProdutoModel.Descricao)} IS NULL)
+            AND (p.{nameof(ProdutoModel.IdCategoria)} = @{nameof(ProdutoModel.IdCategoria)} 
+                    OR @{nameof(ProdutoModel.IdCategoria)} IS NULL)
+            AND (c.Nome LIKE @CategoriaNome 
+                    OR @CategoriaNome IS NULL)";
+
+        public static readonly string RemoverProduto = $@"
+            DELETE FROM bernhoeft.dbo.Produto
+            WHERE {nameof(ProdutoModel.Id)} = @{nameof(ProdutoModel.Id)}";
 
         public static object ObterParametros(ProdutoModel produto) => new
         {
@@ -53,7 +64,12 @@ namespace inventario.data.Data.Statements
             produto.Ativo
         };
 
-        public static Dictionary<string, object> ObterParametrosParaListar(Guid? id, string nome, string descricao, string categoria, bool? ativo)
+        public static Dictionary<string, object> ObterParametrosParaListar(Guid? id, 
+            string nome, 
+            Guid? idCategoria, 
+            string descricao, 
+            string categoria, 
+            bool? ativo)
         {
             return new Dictionary<string, object>
             {
@@ -61,6 +77,7 @@ namespace inventario.data.Data.Statements
                 [nameof(ProdutoModel.Ativo)] = ativo,
                 [nameof(ProdutoModel.Nome)] = nome is null ? null : $"%{nome}%",
                 [nameof(ProdutoModel.Descricao)] = descricao is null ? null : $"%{descricao}%",
+                [nameof(ProdutoModel.IdCategoria)] = idCategoria,
                 ["CategoriaNome"] = categoria is null ? null : $"%{categoria}%",
             };
         }

@@ -11,8 +11,8 @@ namespace inventario.business.Service
 {
     public class ProdutoService : IProdutoService
     {
-        private IProdutoRepository _produtoRepository;
-        private IUnitOfWork _uow;
+        private readonly IProdutoRepository _produtoRepository;
+        private readonly IUnitOfWork _uow;
 
         public ProdutoService(IProdutoRepository produtoRepository, IUnitOfWork uow)
         {
@@ -20,18 +20,36 @@ namespace inventario.business.Service
             _uow = uow;
         }
 
-        public async Task<ProdutoResponse> AlterarAsync(ProdutoRequest request)
+        public async Task<ProdutoResponse> AlterarAsync(Guid Id, ProdutoRequest request)
         {
             ProdutoModel produtoModel = CreateFrom(request);
 
-            await _produtoRepository.AlterarAsync(produtoModel);
+            var produtos = await _produtoRepository.ListarAsync(Id);
 
-            return CreateFrom(produtoModel);
+            if (!produtos.Any())
+            {
+                throw new InvalidOperationException();
+            }
+
+           _uow.BeginTransaction();
+            await _produtoRepository.AlterarAsync(new()
+            {
+                Id = Id,
+                Ativo= produtoModel.Ativo,
+                Categoria= produtoModel.Categoria,
+                Descricao = produtoModel.Descricao,
+                IdCategoria = produtoModel.IdCategoria,
+                Nome= produtoModel.Nome,
+                Preco = produtoModel.Preco
+            });
+            _uow.Rollback();
+
+            return CreateFrom(produtos.First());
         }
 
-        public async Task<IEnumerable<ProdutoResponse>> ListarAsync(Guid? id = null, string nome = null, string descricao = null, string categoria = null, bool? ativo = null)
+        public async Task<IEnumerable<ProdutoResponse>> ListarAsync(Guid? id = null, string nome = null, Guid? idCategoria = null, string descricao = null, string categoria = null, bool? ativo = null)
         {
-            var result = await _produtoRepository.ListarAsync(id, nome, descricao, categoria, ativo);
+            var result = await _produtoRepository.ListarAsync(id: id, nome: nome, idCategoria: idCategoria, categoria: categoria, descricao: descricao, ativo: ativo);
 
             return result.Select(s => CreateFrom(s));
         }
@@ -47,7 +65,14 @@ namespace inventario.business.Service
             return CreateFrom(produtoModel);
         }
 
-        private ProdutoModel CreateFrom(ProdutoRequest request) => new()
+        public async Task RemoverAsync(Guid Id)
+        {
+            _uow.BeginTransaction();
+            await _produtoRepository.RemoverAsync(Id);
+            _uow.Commit();
+        }
+
+        private static ProdutoModel CreateFrom(ProdutoRequest request) => new()
         {
             Id = request.Id,
             Ativo = request.Ativo,
@@ -57,7 +82,7 @@ namespace inventario.business.Service
             Descricao = request.Descricao
         };
 
-        private ProdutoResponse CreateFrom(ProdutoModel model) => new()
+        private static ProdutoResponse CreateFrom(ProdutoModel model) => new()
         {
             Id = model.Id,
             Ativo = model.Ativo,
