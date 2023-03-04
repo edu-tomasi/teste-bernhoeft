@@ -90,14 +90,13 @@ namespace inventario.data.Context
 
         private void ClearTransaction()
         {
-            Connection.Close();
             Transaction.Dispose();
             Transaction = null;
         }
 
         public void Dispose()
         {
-            Dispose(disposing: false);
+            Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 
