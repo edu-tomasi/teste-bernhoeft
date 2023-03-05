@@ -1,6 +1,6 @@
 ﻿using inventario.business.Models.Request;
 using inventario.business.Models.Response;
-using inventario.business.Service;
+using inventario.business.Service
 using Microsoft.AspNetCore.Mvc;
 
 namespace inventario.web_api.Controllers

@@ -1,5 +1,6 @@
 ﻿using inventario.business.Configurations;
 using inventario.data.Extensions;
+using inventario.web_api.Middlewares;
 using Newtonsoft.Json;
 
 namespace inventario.web_api
@@ -44,6 +45,8 @@ namespace inventario.web_api
 
             app.UseSwagger()
                .UseSwaggerUI();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection()
                 .UseRouting()
