@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using inventario.business.Abstractions.Data;
 using inventario.business.Models;
+using inventario.business.Models.Request;
 using inventario.data.Data.Statements;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,7 @@ namespace inventario.data.Data
         private readonly IUnitOfWork _unitOfWork;
 
         public CategoriaRepository(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+            => _unitOfWork = unitOfWork;
 
         public async Task AdicionarAsync(CategoriaModel categoria)
         {
@@ -33,19 +32,19 @@ namespace inventario.data.Data
                               transaction: _unitOfWork.Transaction);
         }
 
-        public async Task<IEnumerable<CategoriaModel>> ListarAsync(Guid? id, string nome, bool? ativo)
+        public async Task<IEnumerable<CategoriaModel>> ListarAsync(FilterCategoriaRequest request)
         {
             return await _unitOfWork.Connection
                             .QueryAsync<CategoriaModel>(sql: CategoriaStatements.ListarCategorias,
-                                                       param: CategoriaStatements.ObterParametrosParaListar(id, nome, ativo),
+                                                       param: CategoriaStatements.ObterParametrosParaListar(request),
                                                        transaction: _unitOfWork.Transaction);
         }
 
-        public async Task RemoverAsync(Guid Id)
+        public async Task RemoverAsync(Guid id)
         {
             await _unitOfWork.Connection
                     .ExecuteAsync(sql: CategoriaStatements.RemoverCategoria,
-                                  param: new { Id },
+                                  param: new { Id = id },
                                   transaction: _unitOfWork.Transaction);
         }
 

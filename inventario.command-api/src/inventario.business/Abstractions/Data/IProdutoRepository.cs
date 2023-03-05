@@ -1,4 +1,5 @@
 ﻿using inventario.business.Models;
+using inventario.business.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,8 +12,8 @@ namespace inventario.business.Abstractions.Data
 
         Task AlterarAsync(ProdutoModel produto);
 
-        Task<IEnumerable<ProdutoModel>> ListarAsync(Guid? id = null, string nome = null,Guid? idCategoria = null, string categoria = null, string descricao = null , bool? ativo = null);
+        Task<IEnumerable<ProdutoModel>> ListarAsync(FilterProdutoRequest request);
 
-        Task RemoverAsync(Guid Id);
+        Task RemoverAsync(Guid id);
     }
 }

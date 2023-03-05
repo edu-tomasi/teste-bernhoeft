@@ -6,8 +6,6 @@ namespace inventario.business.Models.Request
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        public string Type { get; } = "produto";
-
         public string Nome { get; init; }
 
         public decimal Preco { get; init; }

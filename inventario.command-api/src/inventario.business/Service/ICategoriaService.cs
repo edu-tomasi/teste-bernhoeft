@@ -10,10 +10,10 @@ namespace inventario.business.Service
     {
         Task<CategoriaResponse> AdicionarAsync(CategoriaRequest request);
 
-        Task<CategoriaResponse> AlterarAsync(Guid Id, CategoriaRequest request);
+        Task<CategoriaResponse> AlterarAsync(Guid id, CategoriaRequest request);
 
-        Task<IEnumerable<CategoriaResponse>> ListarAsync(Guid? Id = null, string nome = null, bool? ativo = null);
+        Task<IEnumerable<CategoriaResponse>> ListarAsync(FilterCategoriaRequest request);
 
-        Task RemoverAsync(Guid Id);
+        Task RemoverAsync(Guid id);
     }
 }

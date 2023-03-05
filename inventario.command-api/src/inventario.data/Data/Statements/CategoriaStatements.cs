@@ -1,5 +1,5 @@
 ﻿using inventario.business.Models;
-using System;
+using inventario.business.Models.Request;
 using System.Collections.Generic;
 
 namespace inventario.data.Data.Statements
@@ -26,12 +26,12 @@ namespace inventario.data.Data.Statements
                    {nameof(CategoriaModel.Nome)},
                    {nameof(CategoriaModel.Ativo)}
             FROM bernhoeft.dbo.Categoria WITH (NOLOCK)
-            WHERE ({nameof(CategoriaModel.Id)} = @{nameof(CategoriaModel.Id)} 
-                    OR @{nameof(CategoriaModel.Id)} IS NULL)
-            AND ({nameof(CategoriaModel.Nome)} COLLATE Latin1_general_CI_AI LIKE @{nameof(CategoriaModel.Nome)} COLLATE Latin1_general_CI_AI 
-                    OR @{nameof(CategoriaModel.Nome)} IS NULL)
-            AND ({nameof(CategoriaModel.Ativo)} = @{nameof(CategoriaModel.Ativo)} 
-                    OR @{nameof(CategoriaModel.Ativo)} IS NULL)";
+            WHERE ({nameof(CategoriaModel.Id)} = @{nameof(FilterCategoriaRequest.Id)} 
+                    OR @{nameof(FilterCategoriaRequest.Id)} IS NULL)
+            AND ({nameof(CategoriaModel.Nome)} COLLATE Latin1_general_CI_AI LIKE @{nameof(FilterCategoriaRequest.Nome)} COLLATE Latin1_general_CI_AI 
+                    OR @{nameof(FilterCategoriaRequest.Nome)} IS NULL)
+            AND ({nameof(CategoriaModel.Ativo)} = @{nameof(FilterCategoriaRequest.Ativo)} 
+                    OR @{nameof(FilterCategoriaRequest.Ativo)} IS NULL)";
 
         public static readonly string RemoverCategoria = $@"
             DELETE FROM bernhoeft.dbo.Categoria
@@ -44,13 +44,13 @@ namespace inventario.data.Data.Statements
             categoria.Ativo
         };
 
-        public static Dictionary<string, object> ObterParametrosParaListar(Guid? id, string nome, bool? ativo)
+        public static Dictionary<string, object> ObterParametrosParaListar(FilterCategoriaRequest request)
         {
             return new Dictionary<string, object>()
             {
-                ["Id"] = id,
-                ["Nome"] = nome is null ? null : $"%{nome}%",
-                ["Ativo"] = ativo
+                [nameof(FilterCategoriaRequest.Id)] = request.Id,
+                [nameof(FilterCategoriaRequest.Nome)] = request.Nome is null ? null : $"%{request.Nome}%",
+                [nameof(FilterCategoriaRequest.Ativo)] = request.Ativo
             };
         }
     }

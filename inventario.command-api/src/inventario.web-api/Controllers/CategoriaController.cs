@@ -11,29 +11,27 @@ namespace inventario.web_api.Controllers
     public class CategoriaController : ControllerBase
     {
         public CategoriaController(ICategoriaService service)
-        {
-            _service = service;
-        }
+            => Service = service;
 
-        private ICategoriaService _service { get; }
+        private ICategoriaService Service { get; }
 
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<CategoriaResponse>>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] bool? Ativo)
+        public async Task<ActionResult<IEnumerable<CategoriaResponse>>> Get(FilterCategoriaRequest request)
         {
-            var result = await _service.ListarAsync(Id, Nome, Ativo);
+            var result = await Service.ListarAsync(request);
             return Ok(result);
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> GetById(Guid Id)
+        public async Task<ActionResult<CategoriaResponse>> GetById(Guid id)
         {
-            var result = await _service.ListarAsync(Id);
+            var result = await Service.ListarAsync(new() { Id = id });
             return Ok(result);
         }
 
@@ -42,29 +40,29 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CategoriaResponse>> Post(CategoriaRequest request)
         {
-            var result = await _service.AdicionarAsync(request);
+            var result = await Service.AdicionarAsync(request);
 
             return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CategoriaResponse>> Put(Guid Id, CategoriaRequest request)
+        public async Task<ActionResult<CategoriaResponse>> Put(Guid id, CategoriaRequest request)
         {
-            var result = await _service.AlterarAsync(Id, request);
+            var result = await Service.AlterarAsync(id, request);
 
             return Ok(result);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(Guid Id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            await _service.RemoverAsync(Id);
+            await Service.RemoverAsync(id);
             return NoContent();
         }
     }

@@ -6,8 +6,6 @@ namespace inventario.business.Models.Response
     {
         public Guid Id { get; init; }
 
-        public string Type { get; } = "produto";
-
         public string Nome { get; init; }
 
         public bool Ativo { get; init; }
@@ -16,7 +14,7 @@ namespace inventario.business.Models.Response
 
         public string Descricao { get; set; }
 
-        public CategoriaResponse Categoria {get; set;}
+        public CategoriaResponse Categoria { get; set; }
 
     }
 }

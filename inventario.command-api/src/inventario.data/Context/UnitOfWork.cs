@@ -12,7 +12,7 @@ namespace inventario.data.Context
 
         public UnitOfWork(IDbConnection connection)
         {
-            Connection = connection;
+            _connection = connection;
         }
 
         public IDbConnection Connection
@@ -22,6 +22,10 @@ namespace inventario.data.Context
                 if (_connection.State is not ConnectionState.Open)
                 {
                     _connection.Open();
+                    if (_connection.State is not ConnectionState.Open)
+                    {
+                        throw new InvalidOperationException("Connection should be open.");
+                    }
                 }
                 return _connection;
             }
@@ -38,7 +42,7 @@ namespace inventario.data.Context
         {
             if (_transactionCounter == 0)
             {
-                Transaction = _connection.BeginTransaction();
+                Transaction = Connection.BeginTransaction();
             }
 
             _transactionCounter++;
@@ -111,6 +115,7 @@ namespace inventario.data.Context
             {
                 Transaction?.Dispose();
                 Connection?.Dispose();
+                _connection = null;
             }
 
             _disposed = true;

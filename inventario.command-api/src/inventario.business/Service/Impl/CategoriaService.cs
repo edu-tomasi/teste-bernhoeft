@@ -16,11 +16,7 @@ namespace inventario.business.Service
         private readonly IUnitOfWork _uow;
 
         public CategoriaService(ICategoriaRepository categoriaRepository, IProdutoRepository produtoRepository, IUnitOfWork uow)
-        {
-            _categoriaRepository = categoriaRepository;
-            _produtoRepository = produtoRepository;
-            _uow = uow;
-        }
+            => (_categoriaRepository, _produtoRepository, _uow) = (categoriaRepository, produtoRepository, uow);
 
         public async Task<CategoriaResponse> AdicionarAsync(CategoriaRequest request)
         {
@@ -33,41 +29,41 @@ namespace inventario.business.Service
             return CreateFrom(categoriaModel);
         }
 
-        public async Task<CategoriaResponse> AlterarAsync(Guid Id, CategoriaRequest request)
+        public async Task<CategoriaResponse> AlterarAsync(Guid id, CategoriaRequest request)
         {
             CategoriaModel categoriaModel = CreateFrom(request);
 
-            var categorias = await _categoriaRepository.ListarAsync(Id);
+            var categorias = await _categoriaRepository.ListarAsync(new() { Id = id });
 
             if (!categorias.Any())
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Não foi encontrado a categoria para edição.");
             }
 
             _uow.BeginTransaction();
-            await _categoriaRepository.AlterarAsync(new() { Id = Id, Ativo = request.Ativo, Nome = request.Nome });
+            await _categoriaRepository.AlterarAsync(new() { Id = id, Ativo = request.Ativo, Nome = request.Nome });
             _uow.Commit();
 
             return CreateFrom(categoriaModel);
         }
 
-        public async Task RemoverAsync(Guid Id)
+        public async Task RemoverAsync(Guid id)
         {
             _uow.BeginTransaction();
-            var produtos = await _produtoRepository.ListarAsync(idCategoria: Id);
+            var produtos = await _produtoRepository.ListarAsync(new() { IdCategoria = id });
 
             foreach (var item in produtos)
             {
                 await _produtoRepository.RemoverAsync(item.Id);
             }
 
-            await _categoriaRepository.RemoverAsync(Id);
+            await _categoriaRepository.RemoverAsync(id);
             _uow.Commit();
         }
 
-        public async Task<IEnumerable<CategoriaResponse>> ListarAsync(Guid? id = null, string nome = null, bool? ativo = null)
+        public async Task<IEnumerable<CategoriaResponse>> ListarAsync(FilterCategoriaRequest request)
         {
-            var result = await _categoriaRepository.ListarAsync(id, nome, ativo);
+            var result = await _categoriaRepository.ListarAsync(request);
 
             return result.Select(s => CreateFrom(s));
         }

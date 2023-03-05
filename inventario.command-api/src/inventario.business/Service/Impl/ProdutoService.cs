@@ -15,41 +15,48 @@ namespace inventario.business.Service
         private readonly IUnitOfWork _uow;
 
         public ProdutoService(IProdutoRepository produtoRepository, IUnitOfWork uow)
-        {
-            _produtoRepository = produtoRepository;
-            _uow = uow;
-        }
+            => (_produtoRepository, _uow) = (produtoRepository, uow);
 
-        public async Task<ProdutoResponse> AlterarAsync(Guid Id, ProdutoRequest request)
+        public async Task<ProdutoResponse> AlterarAsync(Guid id, ProdutoRequest request)
         {
             ProdutoModel produtoModel = CreateFrom(request);
 
-            var produtos = await _produtoRepository.ListarAsync(Id);
-
-            if (!produtos.Any())
+            try
             {
-                throw new InvalidOperationException();
+                var produtos = await _produtoRepository.ListarAsync(new() { Id = id });
+                if (!produtos.Any())
+                {
+                    throw new InvalidOperationException("Não foi encontrado o produto para edição.");
+                }
+
+                _uow.BeginTransaction();
+                await _produtoRepository.AlterarAsync(new()
+                {
+                    Id = id,
+                    Ativo = produtoModel.Ativo,
+                    Categoria = produtoModel.Categoria,
+                    Descricao = produtoModel.Descricao,
+                    IdCategoria = produtoModel.IdCategoria,
+                    Nome = produtoModel.Nome,
+                    Preco = produtoModel.Preco
+                });
+
+                produtoModel = produtos.First();
+
+                _uow.Commit();
+            }
+            catch (Exception)
+            {
+                _uow.Rollback();
+                throw;
             }
 
-           _uow.BeginTransaction();
-            await _produtoRepository.AlterarAsync(new()
-            {
-                Id = Id,
-                Ativo= produtoModel.Ativo,
-                Categoria= produtoModel.Categoria,
-                Descricao = produtoModel.Descricao,
-                IdCategoria = produtoModel.IdCategoria,
-                Nome= produtoModel.Nome,
-                Preco = produtoModel.Preco
-            });
-            _uow.Rollback();
-
-            return CreateFrom(produtos.First());
+            return CreateFrom(produtoModel);
         }
 
-        public async Task<IEnumerable<ProdutoResponse>> ListarAsync(Guid? id = null, string nome = null, Guid? idCategoria = null, string descricao = null, string categoria = null, bool? ativo = null)
+        public async Task<IEnumerable<ProdutoResponse>> ListarAsync(FilterProdutoRequest request)
         {
-            var result = await _produtoRepository.ListarAsync(id: id, nome: nome, idCategoria: idCategoria, categoria: categoria, descricao: descricao, ativo: ativo);
+            var result = await _produtoRepository.ListarAsync(request);
 
             return result.Select(s => CreateFrom(s));
         }
@@ -58,18 +65,42 @@ namespace inventario.business.Service
         {
             ProdutoModel produtoModel = CreateFrom(request);
 
-            _uow.BeginTransaction();
-            await _produtoRepository.AdicionarAsync(produtoModel);
-            _uow.Commit();
+            try
+            {
+                _uow.BeginTransaction();
+
+                await _produtoRepository.AdicionarAsync(produtoModel);
+
+                _uow.Commit();
+            }
+            catch (Exception)
+            {
+                _uow.Rollback();
+                throw;
+            }
+            finally
+            {
+                var produtos = await _produtoRepository.ListarAsync(new() { Id = produtoModel.Id });
+                produtoModel = produtos.First();
+            }
 
             return CreateFrom(produtoModel);
         }
 
-        public async Task RemoverAsync(Guid Id)
+        public async Task RemoverAsync(Guid id)
         {
-            _uow.BeginTransaction();
-            await _produtoRepository.RemoverAsync(Id);
-            _uow.Commit();
+            try
+            {
+                _uow.BeginTransaction();
+                await _produtoRepository.RemoverAsync(id);
+                _uow.Commit();
+            }
+            catch (Exception)
+            {
+                _uow.Rollback();
+                throw;
+            }
+
         }
 
         private static ProdutoModel CreateFrom(ProdutoRequest request) => new()
@@ -89,7 +120,7 @@ namespace inventario.business.Service
             Nome = model.Nome,
             Descricao = model.Descricao,
             Preco = model.Preco,
-            Categoria = new ()
+            Categoria = new()
             {
                 Id = model.Categoria.Id,
                 Ativo = model.Categoria.Ativo,

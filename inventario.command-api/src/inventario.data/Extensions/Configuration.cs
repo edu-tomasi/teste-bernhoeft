@@ -18,8 +18,9 @@ namespace inventario.data.Extensions
                 .AddDatabaseConfig(configuration)
                 .AddScoped<IDbConnection>(provider =>
                 {
-                    var connectionString = provider.GetRequiredService<DatabaseConfig>().ConnectionString;
-                    return new SqlConnection(connectionString);
+                    var conn = SqlClientFactory.Instance.CreateConnection();
+                    conn.ConnectionString = provider.GetRequiredService<DatabaseConfig>().ConnectionString;
+                    return conn;
                 })
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IProdutoRepository, ProdutoRepository>()

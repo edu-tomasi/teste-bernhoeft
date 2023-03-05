@@ -5,10 +5,6 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4A527B23-2A3E-487B-8311-875C2A640A1E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "inventario.business.test", "test\inventario.business.test\inventario.business.test.csproj", "{C68404B5-C51B-48BB-89E3-6FE4755D9EA5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "inventario.business", "src\inventario.business\inventario.business.csproj", "{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4626E45-8B0B-4231-892F-118EEE1EAFDE}"
@@ -18,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "inventario.data", "src\inventario.data\inventario.data.csproj", "{FD92A26A-A7AF-4ACD-A296-3DA550D1254F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "inventario.web-api", "src\inventario.web-api\inventario.web-api.csproj", "{B03B46FD-8772-4A89-9968-E641C87A826F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "inventario.web-api", "src\inventario.web-api\inventario.web-api.csproj", "{B03B46FD-8772-4A89-9968-E641C87A826F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,7 +39,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C68404B5-C51B-48BB-89E3-6FE4755D9EA5} = {4A527B23-2A3E-487B-8311-875C2A640A1E}
 		{FE757AD5-E848-475D-8A5E-8BE8D7C0B838} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}
 		{FD92A26A-A7AF-4ACD-A296-3DA550D1254F} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}
 		{B03B46FD-8772-4A89-9968-E641C87A826F} = {D358260A-FC25-4AD1-86FD-7FBBAE2BAFB7}

@@ -1,5 +1,5 @@
 ﻿using inventario.business.Models;
-using System;
+using inventario.business.Models.Request;
 using System.Collections.Generic;
 
 namespace inventario.data.Data.Statements
@@ -37,18 +37,18 @@ namespace inventario.data.Data.Statements
                     c.{nameof(ProdutoModel.Categoria.Ativo)}
             FROM bernhoeft.dbo.Produto p WITH (NOLOCK)
             INNER JOIN bernhoeft.dbo.Categoria c WITH (NOLOCK) ON p.{nameof(ProdutoModel.IdCategoria)} = c.{nameof(CategoriaModel.Id)}
-            WHERE (p.{nameof(ProdutoModel.Id)} = @{nameof(ProdutoModel.Id)} 
-                    OR @{nameof(ProdutoModel.Id)} IS NULL)
-            AND (p.{nameof(ProdutoModel.Ativo)} = @{nameof(ProdutoModel.Ativo)}
-                    OR @{nameof(ProdutoModel.Ativo)} IS NULL)
-            AND (p.{nameof(ProdutoModel.Nome)} COLLATE Latin1_general_CI_AI LIKE @{nameof(ProdutoModel.Nome)} COLLATE Latin1_general_CI_AI 
-                    OR @{nameof(ProdutoModel.Nome)} IS NULL)
-            AND (p.{nameof(ProdutoModel.Descricao)} COLLATE Latin1_general_CI_AI LIKE @{nameof(ProdutoModel.Descricao)} COLLATE Latin1_general_CI_AI 
-                    OR @{nameof(ProdutoModel.Descricao)} IS NULL)
-            AND (p.{nameof(ProdutoModel.IdCategoria)} = @{nameof(ProdutoModel.IdCategoria)} 
-                    OR @{nameof(ProdutoModel.IdCategoria)} IS NULL)
-            AND (c.Nome LIKE @CategoriaNome 
-                    OR @CategoriaNome IS NULL)";
+            WHERE (p.{nameof(ProdutoModel.Id)} = @{nameof(FilterProdutoRequest.Id)} 
+                    OR @{nameof(FilterProdutoRequest.Id)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Ativo)} = @{nameof(FilterProdutoRequest.Ativo)}
+                    OR @{nameof(FilterProdutoRequest.Ativo)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Nome)} COLLATE Latin1_general_CI_AI LIKE @{nameof(FilterProdutoRequest.Nome)} COLLATE Latin1_general_CI_AI 
+                    OR @{nameof(FilterProdutoRequest.Nome)} IS NULL)
+            AND (p.{nameof(ProdutoModel.Descricao)} COLLATE Latin1_general_CI_AI LIKE @{nameof(FilterProdutoRequest.Descricao)} COLLATE Latin1_general_CI_AI 
+                    OR @{nameof(FilterProdutoRequest.Descricao)} IS NULL)
+            AND (p.{nameof(ProdutoModel.IdCategoria)} = @{nameof(FilterProdutoRequest.IdCategoria)} 
+                    OR @{nameof(FilterProdutoRequest.IdCategoria)} IS NULL)
+            AND (c.{nameof(ProdutoModel.Categoria.Nome)} LIKE @{nameof(FilterProdutoRequest.Categoria)} 
+                    OR @{nameof(FilterProdutoRequest.Categoria)} IS NULL)";
 
         public static readonly string RemoverProduto = $@"
             DELETE FROM bernhoeft.dbo.Produto
@@ -64,21 +64,16 @@ namespace inventario.data.Data.Statements
             produto.Ativo
         };
 
-        public static Dictionary<string, object> ObterParametrosParaListar(Guid? id, 
-            string nome, 
-            Guid? idCategoria, 
-            string descricao, 
-            string categoria, 
-            bool? ativo)
+        public static Dictionary<string, object> ObterParametrosParaListar(FilterProdutoRequest request)
         {
             return new Dictionary<string, object>
             {
-                [nameof(ProdutoModel.Id)] = id,
-                [nameof(ProdutoModel.Ativo)] = ativo,
-                [nameof(ProdutoModel.Nome)] = nome is null ? null : $"%{nome}%",
-                [nameof(ProdutoModel.Descricao)] = descricao is null ? null : $"%{descricao}%",
-                [nameof(ProdutoModel.IdCategoria)] = idCategoria,
-                ["CategoriaNome"] = categoria is null ? null : $"%{categoria}%",
+                [nameof(FilterProdutoRequest.Id)] = request.Id,
+                [nameof(FilterProdutoRequest.Ativo)] = request.Ativo,
+                [nameof(FilterProdutoRequest.Nome)] = request.Nome is null ? null : $"%{request.Nome}%",
+                [nameof(FilterProdutoRequest.Descricao)] = request.Descricao is null ? null : $"%{request.Descricao}%",
+                [nameof(FilterProdutoRequest.IdCategoria)] = request.IdCategoria,
+                [nameof(FilterProdutoRequest.Categoria)] = request.Categoria is null ? null : $"%{request.Categoria}%",
             };
         }
     }

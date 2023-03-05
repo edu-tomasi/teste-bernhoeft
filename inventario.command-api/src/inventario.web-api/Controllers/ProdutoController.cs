@@ -11,29 +11,27 @@ namespace inventario.web_api.Controllers
     public class ProdutoController : ControllerBase
     {
         public ProdutoController(IProdutoService service)
-        {
-            _service = service;
-        }
+            => Service = service;
 
-        private IProdutoService _service { get; }
+        private IProdutoService Service { get; }
 
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ProdutoResponse>>> Get([FromQuery] Guid? Id, [FromQuery] string? Nome, [FromQuery] Guid? IdCategoria, [FromQuery] string? Descricao, [FromQuery] string? Categoria, [FromQuery] bool? Ativo)
+        public async Task<ActionResult<IEnumerable<ProdutoResponse>>> Get([FromQuery] FilterProdutoRequest request)
         {
-            var result = await _service.ListarAsync(Id, Nome, IdCategoria, Descricao, Categoria, Ativo);
+            var result = await Service.ListarAsync(request);
             return Ok(result);
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProdutoResponse>> GetById(Guid Id)
+        public async Task<ActionResult<ProdutoResponse>> GetById(Guid id)
         {
-            var result = await _service.ListarAsync(Id);
+            var result = await Service.ListarAsync(new() { Id = id });
             return Ok(result);
         }
 
@@ -42,27 +40,27 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ProdutoResponse>> Post(ProdutoRequest request)
         {
-            var result = await _service.AdicionarAsync(request);
+            var result = await Service.AdicionarAsync(request);
             return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProdutoResponse>> Put(Guid Id, ProdutoRequest request)
+        public async Task<ActionResult<ProdutoResponse>> Put(Guid id, ProdutoRequest request)
         {
-            var response = await _service.AlterarAsync(Id, request);
+            var response = await Service.AlterarAsync(id, request);
             return Ok(response);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(Guid Id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            await _service.RemoverAsync(Id);
+            await Service.RemoverAsync(id);
             return NoContent();
         }
     }
