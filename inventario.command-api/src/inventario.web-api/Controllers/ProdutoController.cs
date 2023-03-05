@@ -1,6 +1,7 @@
 ﻿using inventario.business.Models.Request;
 using inventario.business.Models.Response;
-using inventario.business.Service
+using inventario.business.Service;
+using inventario.web_api.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inventario.web_api.Controllers
@@ -10,10 +11,11 @@ namespace inventario.web_api.Controllers
     [Produces("application/json")]
     public class ProdutoController : ControllerBase
     {
-        public ProdutoController(IProdutoService service)
-            => Service = service;
+        public ProdutoController(IProdutoService service, ProdutoValidator validator)
+            => (Service, Validator) = (service, validator);
 
         private IProdutoService Service { get; }
+        private ProdutoValidator Validator { get; }
 
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,8 +42,16 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ProdutoResponse>> Post(ProdutoRequest request)
         {
-            var result = await Service.AdicionarAsync(request);
-            return CreatedAtAction(nameof(GetById), new { result.Id }, result);
+            var validate = await Validator.ValidateAsync(request);
+
+            if (validate.IsValid)
+            {
+                var result = await Service.AdicionarAsync(request);
+                return CreatedAtAction(nameof(GetById), new { result.Id }, result);
+            }
+
+            var errorMessage = validate.Errors.Select(e => e.ErrorMessage).ToList();
+            return BadRequest(errorMessage);
         }
 
         [HttpPut("{id}")]
@@ -50,8 +60,16 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ProdutoResponse>> Put(Guid id, ProdutoRequest request)
         {
-            var response = await Service.AlterarAsync(id, request);
-            return Ok(response);
+            var validate = await Validator.ValidateAsync(request);
+
+            if (validate.IsValid)
+            {
+                var response = await Service.AlterarAsync(id, request);
+                return Ok(response);
+            }
+
+            var errorMessage = validate.Errors.Select(e => e.ErrorMessage).ToList();
+            return BadRequest(errorMessage);
         }
 
         [HttpDelete("{id}")]

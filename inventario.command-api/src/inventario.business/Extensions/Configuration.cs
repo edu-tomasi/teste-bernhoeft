@@ -5,7 +5,7 @@ namespace inventario.business.Configurations
 {
     public static class Configuration
     {
-        public static IServiceCollection AddBusiness(this IServiceCollection services)
+        public static IServiceCollection AddInventarioBusiness(this IServiceCollection services)
         {
             return services
                 .AddScoped<ICategoriaService, CategoriaService>()

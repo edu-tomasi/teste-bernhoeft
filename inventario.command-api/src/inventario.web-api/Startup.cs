@@ -1,5 +1,6 @@
 ﻿using inventario.business.Configurations;
 using inventario.data.Extensions;
+using inventario.web_api.Extensions;
 using inventario.web_api.Middlewares;
 using Newtonsoft.Json;
 
@@ -28,12 +29,11 @@ namespace inventario.web_api
 
             JsonConvert.DefaultSettings = () => jsonSettings;
 
-            services.AddControllers();
+            
             services
-                .AddEndpointsApiExplorer()
-                .AddSwaggerGen()
-                .AddBusiness()
-                .AddInfraData(_configuration);
+                .AddInventarioBusiness()
+                .AddInventarioInfra(_configuration)
+                .AddInventarioWebApi();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

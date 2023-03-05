@@ -12,7 +12,7 @@ namespace inventario.data.Extensions
 {
     public static class Configuration
     {
-        public static IServiceCollection AddInfraData(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInventarioInfra(this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddDatabaseConfig(configuration)

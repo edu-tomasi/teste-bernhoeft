@@ -23,13 +23,19 @@ namespace inventario.business.Service
 
             try
             {
+                _uow.BeginTransaction();
+
+                if (id != request.Id)
+                {
+                    throw new InvalidOperationException("O Id informado no URL não é o mesmo do informado no corpo da requisição.");
+                }
+
                 var produtos = await _produtoRepository.ListarAsync(new() { Id = id });
                 if (!produtos.Any())
                 {
                     throw new InvalidOperationException("Não foi encontrado o produto para edição.");
                 }
 
-                _uow.BeginTransaction();
                 await _produtoRepository.AlterarAsync(new()
                 {
                     Id = id,
