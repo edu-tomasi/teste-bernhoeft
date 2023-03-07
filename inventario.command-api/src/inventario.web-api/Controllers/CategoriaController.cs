@@ -22,7 +22,7 @@ namespace inventario.web_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<CategoriaResponse>>> Get(FilterCategoriaRequest request)
+        public async Task<ActionResult<IEnumerable<CategoriaResponse>>> Get([FromQuery]FilterCategoriaRequest request)
         {
             var result = await Service.ListarAsync(request);
             return Ok(result);
